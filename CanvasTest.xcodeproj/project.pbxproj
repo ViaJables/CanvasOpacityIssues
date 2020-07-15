@@ -1,0 +1,567 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1A9D669B24AAE345004D35EA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D669A24AAE345004D35EA /* AppDelegate.swift */; };
+		1A9D669D24AAE345004D35EA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D669C24AAE345004D35EA /* SceneDelegate.swift */; };
+		1A9D669F24AAE345004D35EA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D669E24AAE345004D35EA /* ViewController.swift */; };
+		1A9D66A224AAE345004D35EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9D66A024AAE345004D35EA /* Main.storyboard */; };
+		1A9D66A424AAE348004D35EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1A9D66A324AAE348004D35EA /* Assets.xcassets */; };
+		1A9D66A724AAE348004D35EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1A9D66A524AAE348004D35EA /* LaunchScreen.storyboard */; };
+		1A9D66DD24AAE370004D35EA /* DataObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B024AAE370004D35EA /* DataObserver.swift */; };
+		1A9D66DE24AAE370004D35EA /* CanvasData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B124AAE370004D35EA /* CanvasData.swift */; };
+		1A9D66DF24AAE370004D35EA /* DataImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B224AAE370004D35EA /* DataImporter.swift */; };
+		1A9D66E024AAE370004D35EA /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B324AAE370004D35EA /* DataExporter.swift */; };
+		1A9D66E124AAE370004D35EA /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B424AAE370004D35EA /* Document.swift */; };
+		1A9D66E224AAE370004D35EA /* LessonData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B524AAE370004D35EA /* LessonData.swift */; };
+		1A9D66E324AAE370004D35EA /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 1A9D66B624AAE370004D35EA /* .gitkeep */; };
+		1A9D66E424AAE370004D35EA /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B824AAE370004D35EA /* Canvas.swift */; };
+		1A9D66E524AAE370004D35EA /* ScrollableCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66B924AAE370004D35EA /* ScrollableCanvas.swift */; };
+		1A9D66E624AAE370004D35EA /* ActionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66BA24AAE370004D35EA /* ActionObserver.swift */; };
+		1A9D66E724AAE370004D35EA /* MLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66BC24AAE370004D35EA /* MLError.swift */; };
+		1A9D66E824AAE370004D35EA /* RenderTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66BD24AAE370004D35EA /* RenderTarget.swift */; };
+		1A9D66E924AAE370004D35EA /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66BE24AAE370004D35EA /* MetalView.swift */; };
+		1A9D66EA24AAE370004D35EA /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66BF24AAE370004D35EA /* Shaders.metal */; };
+		1A9D66EB24AAE370004D35EA /* MLTexture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C024AAE370004D35EA /* MLTexture.swift */; };
+		1A9D66EC24AAE370004D35EA /* SnapshotTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C124AAE370004D35EA /* SnapshotTarget.swift */; };
+		1A9D66ED24AAE370004D35EA /* MLColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C224AAE370004D35EA /* MLColor.swift */; };
+		1A9D66EE24AAE370004D35EA /* CanvasAudioRecording.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C524AAE370004D35EA /* CanvasAudioRecording.swift */; };
+		1A9D66EF24AAE370004D35EA /* CanvasReferenceResize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C624AAE370004D35EA /* CanvasReferenceResize.swift */; };
+		1A9D66F024AAE370004D35EA /* StartOrStopDrawingAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C724AAE370004D35EA /* StartOrStopDrawingAction.swift */; };
+		1A9D66F124AAE370004D35EA /* CanvasColorChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C824AAE370004D35EA /* CanvasColorChange.swift */; };
+		1A9D66F224AAE370004D35EA /* CanvasAddReference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66C924AAE370004D35EA /* CanvasAddReference.swift */; };
+		1A9D66F324AAE370004D35EA /* CanvasColorSamplerEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CA24AAE370004D35EA /* CanvasColorSamplerEvent.swift */; };
+		1A9D66F424AAE370004D35EA /* CanvasDragEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CB24AAE370004D35EA /* CanvasDragEvent.swift */; };
+		1A9D66F524AAE370004D35EA /* CanvasButtonPress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CC24AAE370004D35EA /* CanvasButtonPress.swift */; };
+		1A9D66F624AAE370004D35EA /* CanvasTransformEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CD24AAE370004D35EA /* CanvasTransformEvent.swift */; };
+		1A9D66F724AAE370004D35EA /* CanvasValueChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CE24AAE370004D35EA /* CanvasValueChange.swift */; };
+		1A9D66F824AAE370004D35EA /* LineStrip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66CF24AAE370004D35EA /* LineStrip.swift */; };
+		1A9D66F924AAE370004D35EA /* MLLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D024AAE370004D35EA /* MLLine.swift */; };
+		1A9D66FA24AAE370004D35EA /* Chartlet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D124AAE370004D35EA /* Chartlet.swift */; };
+		1A9D66FB24AAE370004D35EA /* Eraser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D324AAE370004D35EA /* Eraser.swift */; };
+		1A9D66FC24AAE370004D35EA /* Printer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D424AAE370004D35EA /* Printer.swift */; };
+		1A9D66FD24AAE370004D35EA /* GlowingBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D524AAE370004D35EA /* GlowingBrush.swift */; };
+		1A9D66FE24AAE370004D35EA /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D624AAE370004D35EA /* Brush.swift */; };
+		1A9D66FF24AAE370004D35EA /* PaintingGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D824AAE370004D35EA /* PaintingGestureRecognizer.swift */; };
+		1A9D670024AAE370004D35EA /* BezierGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66D924AAE370004D35EA /* BezierGenerator.swift */; };
+		1A9D670124AAE370004D35EA /* WeakObjectBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66DA24AAE370004D35EA /* WeakObjectBox.swift */; };
+		1A9D670224AAE370004D35EA /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66DB24AAE370004D35EA /* Maths.swift */; };
+		1A9D670324AAE370004D35EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66DC24AAE370004D35EA /* Utils.swift */; };
+		1A9D670524AAE4EE004D35EA /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D670424AAE4EE004D35EA /* UIColor+Hex.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1A9D669724AAE345004D35EA /* CanvasTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CanvasTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1A9D669A24AAE345004D35EA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1A9D669C24AAE345004D35EA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		1A9D669E24AAE345004D35EA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1A9D66A124AAE345004D35EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1A9D66A324AAE348004D35EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1A9D66A624AAE348004D35EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1A9D66A824AAE348004D35EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1A9D66B024AAE370004D35EA /* DataObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataObserver.swift; sourceTree = "<group>"; };
+		1A9D66B124AAE370004D35EA /* CanvasData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasData.swift; sourceTree = "<group>"; };
+		1A9D66B224AAE370004D35EA /* DataImporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataImporter.swift; sourceTree = "<group>"; };
+		1A9D66B324AAE370004D35EA /* DataExporter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataExporter.swift; sourceTree = "<group>"; };
+		1A9D66B424AAE370004D35EA /* Document.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
+		1A9D66B524AAE370004D35EA /* LessonData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LessonData.swift; sourceTree = "<group>"; };
+		1A9D66B624AAE370004D35EA /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		1A9D66B824AAE370004D35EA /* Canvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		1A9D66B924AAE370004D35EA /* ScrollableCanvas.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableCanvas.swift; sourceTree = "<group>"; };
+		1A9D66BA24AAE370004D35EA /* ActionObserver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionObserver.swift; sourceTree = "<group>"; };
+		1A9D66BC24AAE370004D35EA /* MLError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLError.swift; sourceTree = "<group>"; };
+		1A9D66BD24AAE370004D35EA /* RenderTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderTarget.swift; sourceTree = "<group>"; };
+		1A9D66BE24AAE370004D35EA /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
+		1A9D66BF24AAE370004D35EA /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
+		1A9D66C024AAE370004D35EA /* MLTexture.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLTexture.swift; sourceTree = "<group>"; };
+		1A9D66C124AAE370004D35EA /* SnapshotTarget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotTarget.swift; sourceTree = "<group>"; };
+		1A9D66C224AAE370004D35EA /* MLColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLColor.swift; sourceTree = "<group>"; };
+		1A9D66C524AAE370004D35EA /* CanvasAudioRecording.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasAudioRecording.swift; sourceTree = "<group>"; };
+		1A9D66C624AAE370004D35EA /* CanvasReferenceResize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasReferenceResize.swift; sourceTree = "<group>"; };
+		1A9D66C724AAE370004D35EA /* StartOrStopDrawingAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartOrStopDrawingAction.swift; sourceTree = "<group>"; };
+		1A9D66C824AAE370004D35EA /* CanvasColorChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasColorChange.swift; sourceTree = "<group>"; };
+		1A9D66C924AAE370004D35EA /* CanvasAddReference.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasAddReference.swift; sourceTree = "<group>"; };
+		1A9D66CA24AAE370004D35EA /* CanvasColorSamplerEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasColorSamplerEvent.swift; sourceTree = "<group>"; };
+		1A9D66CB24AAE370004D35EA /* CanvasDragEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasDragEvent.swift; sourceTree = "<group>"; };
+		1A9D66CC24AAE370004D35EA /* CanvasButtonPress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasButtonPress.swift; sourceTree = "<group>"; };
+		1A9D66CD24AAE370004D35EA /* CanvasTransformEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasTransformEvent.swift; sourceTree = "<group>"; };
+		1A9D66CE24AAE370004D35EA /* CanvasValueChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasValueChange.swift; sourceTree = "<group>"; };
+		1A9D66CF24AAE370004D35EA /* LineStrip.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineStrip.swift; sourceTree = "<group>"; };
+		1A9D66D024AAE370004D35EA /* MLLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MLLine.swift; sourceTree = "<group>"; };
+		1A9D66D124AAE370004D35EA /* Chartlet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chartlet.swift; sourceTree = "<group>"; };
+		1A9D66D324AAE370004D35EA /* Eraser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eraser.swift; sourceTree = "<group>"; };
+		1A9D66D424AAE370004D35EA /* Printer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Printer.swift; sourceTree = "<group>"; };
+		1A9D66D524AAE370004D35EA /* GlowingBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlowingBrush.swift; sourceTree = "<group>"; };
+		1A9D66D624AAE370004D35EA /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
+		1A9D66D824AAE370004D35EA /* PaintingGestureRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintingGestureRecognizer.swift; sourceTree = "<group>"; };
+		1A9D66D924AAE370004D35EA /* BezierGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BezierGenerator.swift; sourceTree = "<group>"; };
+		1A9D66DA24AAE370004D35EA /* WeakObjectBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WeakObjectBox.swift; sourceTree = "<group>"; };
+		1A9D66DB24AAE370004D35EA /* Maths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Maths.swift; sourceTree = "<group>"; };
+		1A9D66DC24AAE370004D35EA /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		1A9D670424AAE4EE004D35EA /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1A9D669424AAE345004D35EA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A9D668E24AAE345004D35EA = {
+			isa = PBXGroup;
+			children = (
+				1A9D669924AAE345004D35EA /* CanvasTest */,
+				1A9D669824AAE345004D35EA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1A9D669824AAE345004D35EA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D669724AAE345004D35EA /* CanvasTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1A9D669924AAE345004D35EA /* CanvasTest */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66AE24AAE370004D35EA /* Canvas */,
+				1A9D669A24AAE345004D35EA /* AppDelegate.swift */,
+				1A9D669C24AAE345004D35EA /* SceneDelegate.swift */,
+				1A9D670424AAE4EE004D35EA /* UIColor+Hex.swift */,
+				1A9D669E24AAE345004D35EA /* ViewController.swift */,
+				1A9D66A024AAE345004D35EA /* Main.storyboard */,
+				1A9D66A324AAE348004D35EA /* Assets.xcassets */,
+				1A9D66A524AAE348004D35EA /* LaunchScreen.storyboard */,
+				1A9D66A824AAE348004D35EA /* Info.plist */,
+			);
+			path = CanvasTest;
+			sourceTree = "<group>";
+		};
+		1A9D66AE24AAE370004D35EA /* Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66AF24AAE370004D35EA /* Data & Documents */,
+				1A9D66B624AAE370004D35EA /* .gitkeep */,
+				1A9D66B724AAE370004D35EA /* Canvas */,
+				1A9D66BB24AAE370004D35EA /* MetalBase */,
+				1A9D66C324AAE370004D35EA /* Elements */,
+				1A9D66D224AAE370004D35EA /* Brush */,
+				1A9D66D724AAE370004D35EA /* Math & Utils */,
+			);
+			path = Canvas;
+			sourceTree = "<group>";
+		};
+		1A9D66AF24AAE370004D35EA /* Data & Documents */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66B024AAE370004D35EA /* DataObserver.swift */,
+				1A9D66B124AAE370004D35EA /* CanvasData.swift */,
+				1A9D66B224AAE370004D35EA /* DataImporter.swift */,
+				1A9D66B324AAE370004D35EA /* DataExporter.swift */,
+				1A9D66B424AAE370004D35EA /* Document.swift */,
+				1A9D66B524AAE370004D35EA /* LessonData.swift */,
+			);
+			path = "Data & Documents";
+			sourceTree = "<group>";
+		};
+		1A9D66B724AAE370004D35EA /* Canvas */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66B824AAE370004D35EA /* Canvas.swift */,
+				1A9D66B924AAE370004D35EA /* ScrollableCanvas.swift */,
+				1A9D66BA24AAE370004D35EA /* ActionObserver.swift */,
+			);
+			path = Canvas;
+			sourceTree = "<group>";
+		};
+		1A9D66BB24AAE370004D35EA /* MetalBase */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66BC24AAE370004D35EA /* MLError.swift */,
+				1A9D66BD24AAE370004D35EA /* RenderTarget.swift */,
+				1A9D66BE24AAE370004D35EA /* MetalView.swift */,
+				1A9D66BF24AAE370004D35EA /* Shaders.metal */,
+				1A9D66C024AAE370004D35EA /* MLTexture.swift */,
+				1A9D66C124AAE370004D35EA /* SnapshotTarget.swift */,
+				1A9D66C224AAE370004D35EA /* MLColor.swift */,
+			);
+			path = MetalBase;
+			sourceTree = "<group>";
+		};
+		1A9D66C324AAE370004D35EA /* Elements */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66C424AAE370004D35EA /* CanvasActions */,
+				1A9D66CF24AAE370004D35EA /* LineStrip.swift */,
+				1A9D66D024AAE370004D35EA /* MLLine.swift */,
+				1A9D66D124AAE370004D35EA /* Chartlet.swift */,
+			);
+			path = Elements;
+			sourceTree = "<group>";
+		};
+		1A9D66C424AAE370004D35EA /* CanvasActions */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66C524AAE370004D35EA /* CanvasAudioRecording.swift */,
+				1A9D66C624AAE370004D35EA /* CanvasReferenceResize.swift */,
+				1A9D66C724AAE370004D35EA /* StartOrStopDrawingAction.swift */,
+				1A9D66C824AAE370004D35EA /* CanvasColorChange.swift */,
+				1A9D66C924AAE370004D35EA /* CanvasAddReference.swift */,
+				1A9D66CA24AAE370004D35EA /* CanvasColorSamplerEvent.swift */,
+				1A9D66CB24AAE370004D35EA /* CanvasDragEvent.swift */,
+				1A9D66CC24AAE370004D35EA /* CanvasButtonPress.swift */,
+				1A9D66CD24AAE370004D35EA /* CanvasTransformEvent.swift */,
+				1A9D66CE24AAE370004D35EA /* CanvasValueChange.swift */,
+			);
+			path = CanvasActions;
+			sourceTree = "<group>";
+		};
+		1A9D66D224AAE370004D35EA /* Brush */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66D324AAE370004D35EA /* Eraser.swift */,
+				1A9D66D424AAE370004D35EA /* Printer.swift */,
+				1A9D66D524AAE370004D35EA /* GlowingBrush.swift */,
+				1A9D66D624AAE370004D35EA /* Brush.swift */,
+			);
+			path = Brush;
+			sourceTree = "<group>";
+		};
+		1A9D66D724AAE370004D35EA /* Math & Utils */ = {
+			isa = PBXGroup;
+			children = (
+				1A9D66D824AAE370004D35EA /* PaintingGestureRecognizer.swift */,
+				1A9D66D924AAE370004D35EA /* BezierGenerator.swift */,
+				1A9D66DA24AAE370004D35EA /* WeakObjectBox.swift */,
+				1A9D66DB24AAE370004D35EA /* Maths.swift */,
+				1A9D66DC24AAE370004D35EA /* Utils.swift */,
+			);
+			path = "Math & Utils";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1A9D669624AAE345004D35EA /* CanvasTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1A9D66AB24AAE348004D35EA /* Build configuration list for PBXNativeTarget "CanvasTest" */;
+			buildPhases = (
+				1A9D669324AAE345004D35EA /* Sources */,
+				1A9D669424AAE345004D35EA /* Frameworks */,
+				1A9D669524AAE345004D35EA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CanvasTest;
+			productName = CanvasTest;
+			productReference = 1A9D669724AAE345004D35EA /* CanvasTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1A9D668F24AAE345004D35EA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1150;
+				LastUpgradeCheck = 1150;
+				ORGANIZATIONNAME = "John Brunsfeld";
+				TargetAttributes = {
+					1A9D669624AAE345004D35EA = {
+						CreatedOnToolsVersion = 11.5;
+					};
+				};
+			};
+			buildConfigurationList = 1A9D669224AAE345004D35EA /* Build configuration list for PBXProject "CanvasTest" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1A9D668E24AAE345004D35EA;
+			productRefGroup = 1A9D669824AAE345004D35EA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1A9D669624AAE345004D35EA /* CanvasTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1A9D669524AAE345004D35EA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A9D66A724AAE348004D35EA /* LaunchScreen.storyboard in Resources */,
+				1A9D66A424AAE348004D35EA /* Assets.xcassets in Resources */,
+				1A9D66A224AAE345004D35EA /* Main.storyboard in Resources */,
+				1A9D66E324AAE370004D35EA /* .gitkeep in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1A9D669324AAE345004D35EA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A9D66FF24AAE370004D35EA /* PaintingGestureRecognizer.swift in Sources */,
+				1A9D66FA24AAE370004D35EA /* Chartlet.swift in Sources */,
+				1A9D66E824AAE370004D35EA /* RenderTarget.swift in Sources */,
+				1A9D670224AAE370004D35EA /* Maths.swift in Sources */,
+				1A9D66E124AAE370004D35EA /* Document.swift in Sources */,
+				1A9D66F724AAE370004D35EA /* CanvasValueChange.swift in Sources */,
+				1A9D66E024AAE370004D35EA /* DataExporter.swift in Sources */,
+				1A9D66F324AAE370004D35EA /* CanvasColorSamplerEvent.swift in Sources */,
+				1A9D66FB24AAE370004D35EA /* Eraser.swift in Sources */,
+				1A9D66EB24AAE370004D35EA /* MLTexture.swift in Sources */,
+				1A9D66EE24AAE370004D35EA /* CanvasAudioRecording.swift in Sources */,
+				1A9D66EF24AAE370004D35EA /* CanvasReferenceResize.swift in Sources */,
+				1A9D66F024AAE370004D35EA /* StartOrStopDrawingAction.swift in Sources */,
+				1A9D66EC24AAE370004D35EA /* SnapshotTarget.swift in Sources */,
+				1A9D66DE24AAE370004D35EA /* CanvasData.swift in Sources */,
+				1A9D670324AAE370004D35EA /* Utils.swift in Sources */,
+				1A9D66E424AAE370004D35EA /* Canvas.swift in Sources */,
+				1A9D66F524AAE370004D35EA /* CanvasButtonPress.swift in Sources */,
+				1A9D669F24AAE345004D35EA /* ViewController.swift in Sources */,
+				1A9D66FC24AAE370004D35EA /* Printer.swift in Sources */,
+				1A9D66E624AAE370004D35EA /* ActionObserver.swift in Sources */,
+				1A9D670524AAE4EE004D35EA /* UIColor+Hex.swift in Sources */,
+				1A9D669B24AAE345004D35EA /* AppDelegate.swift in Sources */,
+				1A9D66F824AAE370004D35EA /* LineStrip.swift in Sources */,
+				1A9D66F624AAE370004D35EA /* CanvasTransformEvent.swift in Sources */,
+				1A9D66EA24AAE370004D35EA /* Shaders.metal in Sources */,
+				1A9D66E524AAE370004D35EA /* ScrollableCanvas.swift in Sources */,
+				1A9D66FD24AAE370004D35EA /* GlowingBrush.swift in Sources */,
+				1A9D66F424AAE370004D35EA /* CanvasDragEvent.swift in Sources */,
+				1A9D66F224AAE370004D35EA /* CanvasAddReference.swift in Sources */,
+				1A9D66F924AAE370004D35EA /* MLLine.swift in Sources */,
+				1A9D66E724AAE370004D35EA /* MLError.swift in Sources */,
+				1A9D66DF24AAE370004D35EA /* DataImporter.swift in Sources */,
+				1A9D669D24AAE345004D35EA /* SceneDelegate.swift in Sources */,
+				1A9D66FE24AAE370004D35EA /* Brush.swift in Sources */,
+				1A9D670024AAE370004D35EA /* BezierGenerator.swift in Sources */,
+				1A9D66ED24AAE370004D35EA /* MLColor.swift in Sources */,
+				1A9D66E924AAE370004D35EA /* MetalView.swift in Sources */,
+				1A9D66E224AAE370004D35EA /* LessonData.swift in Sources */,
+				1A9D66DD24AAE370004D35EA /* DataObserver.swift in Sources */,
+				1A9D66F124AAE370004D35EA /* CanvasColorChange.swift in Sources */,
+				1A9D670124AAE370004D35EA /* WeakObjectBox.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		1A9D66A024AAE345004D35EA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A9D66A124AAE345004D35EA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1A9D66A524AAE348004D35EA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1A9D66A624AAE348004D35EA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1A9D66A924AAE348004D35EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1A9D66AA24AAE348004D35EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1A9D66AC24AAE348004D35EA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9WLH3NGN9X;
+				INFOPLIST_FILE = CanvasTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = te.CanvasTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1A9D66AD24AAE348004D35EA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 9WLH3NGN9X;
+				INFOPLIST_FILE = CanvasTest/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = te.CanvasTest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1A9D669224AAE345004D35EA /* Build configuration list for PBXProject "CanvasTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A9D66A924AAE348004D35EA /* Debug */,
+				1A9D66AA24AAE348004D35EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1A9D66AB24AAE348004D35EA /* Build configuration list for PBXNativeTarget "CanvasTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A9D66AC24AAE348004D35EA /* Debug */,
+				1A9D66AD24AAE348004D35EA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1A9D668F24AAE345004D35EA /* Project object */;
+}
