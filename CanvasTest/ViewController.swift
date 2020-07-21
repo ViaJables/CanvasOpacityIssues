@@ -58,11 +58,11 @@ class ViewController: UIViewController {
     }
     
     @IBAction func blueTapped(_ sender: Any) {
-        canvas.currentBrush.color = .blue
+        canvas.currentBrush.color = UIColor.init(hexString: "007aff")
     }
     
     @IBAction func yellowTapped(_ sender: Any) {
-        canvas.currentBrush.color = .yellow
+        canvas.currentBrush.color = UIColor.init(hexString: "ffcc00")
     }
     
     @IBAction func blackTapped(_ sender: Any) {
