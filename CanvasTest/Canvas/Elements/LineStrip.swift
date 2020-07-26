@@ -60,7 +60,7 @@ open class LineStrip: CanvasElement {
         renderTarget.clear()
     }
     
-    public func DEAD_CODE_draw(on target: RenderTarget?, scaleFactor: Double) {
+    public func draw(on target: RenderTarget?, scaleFactor: Double) {
         guard lines.count > 0 else {
             return
         }

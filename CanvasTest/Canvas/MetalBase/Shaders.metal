@@ -50,9 +50,6 @@ fragment float4 fragment_render_target(Vertex vertex_data [[ stage_in ]],
                                        sampler smpCanvas [[sampler(0)]],
                                        sampler smpBrush [[sampler(1)]])
 {
-//    constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
-//    float4 canvasColor = float4(tex2dcanvas.sample(textureSampler, vertex_data.text_coord));
-//    float4 brushColor = float4(tex2dbrush.sample(textureSampler, vertex_data.text_coord));
     float4 canvasColor = float4(tex2dcanvas.sample(smpCanvas, vertex_data.text_coord));
     float4 brushColor = float4(tex2dbrush.sample(smpBrush, vertex_data.text_coord));
 
@@ -60,10 +57,10 @@ fragment float4 fragment_render_target(Vertex vertex_data [[ stage_in ]],
     return out;
 };
 
-kernel void kernel_transfer_brush(texture2d<half, access::read_write> tex2dcanvas [[ texture(0) ]],
-                                  texture2d<half, access::read_write> tex2dbrush [[ texture(1) ]],
-                                  constant float &brushOpacity [[ buffer(0) ]],
-                                  uint2 gid [[thread_position_in_grid]]) {
+kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2dbrush [[ texture(0) ]],
+                                      texture2d<half, access::read_write> tex2dcanvas [[ texture(1) ]],
+                                      constant float &brushOpacity [[ buffer(0) ]],
+                                      uint2 gid [[thread_position_in_grid]]) {
     // Check if the pixel is within the bounds of the output texture
     if((gid.x >= tex2dcanvas.get_width()) || (gid.y >= tex2dcanvas.get_height())) {
         // Return early if the pixel is out of bounds
@@ -85,8 +82,6 @@ kernel void kernel_transfer_brush(texture2d<half, access::read_write> tex2dcanva
         newColor = 0;
     } else {
         newColor = (src.rgb + dst.rgb * (1 - src.a));
-//        newColor = (src.rgb * src.a + dst.rgb * dst.a * (1 - src.a)) / newAlpha;
-//        newColor = (src.rgb * src.a + dst.rgb * dst.a * (1 - src.a));
     }
     half4 out = half4(newColor, newAlpha);
     tex2dcanvas.write(out, gid);
@@ -94,6 +89,41 @@ kernel void kernel_transfer_brush(texture2d<half, access::read_write> tex2dcanva
     // clear the brush texture
     half4 transparent = half4(0,0,0,0);
     tex2dbrush.write(transparent, gid);
+}
+
+kernel void kernel_transfer_brush(texture2d<half, access::read> tex2dbrush [[ texture(0) ]],
+                                  texture2d<half, access::read> tex2dcanvas_in [[ texture(1) ]],
+                                  texture2d<half, access::write> tex2dcanvas_out [[ texture(2) ]],
+                                  constant float &brushOpacity [[ buffer(0) ]],
+                                  uint2 gid [[thread_position_in_grid]]) {
+    // Check if the pixel is within the bounds of the output texture
+    if((gid.x >= tex2dbrush.get_width()) || (gid.y >= tex2dbrush.get_height())) {
+        // Return early if the pixel is out of bounds
+        return;
+    }
+    
+    half4 dst = tex2dcanvas_in.read(gid);
+    half4 src = tex2dbrush.read(gid);
+    
+    // multiply by brush opacity, then premultiply rgb by alpha
+    src.a *= brushOpacity;
+    src.rgb *= src.a;
+    
+    // compute the blended brush + canvas
+    // https://en.wikipedia.org/wiki/Alpha_compositing
+    half newAlpha = src.a + dst.a * (1 - src.a);
+    half3 newColor;
+    if (newAlpha == 0) {
+        newColor = 0;
+    } else {
+        newColor = (src.rgb + dst.rgb * (1 - src.a));
+    }
+    half4 out = half4(newColor, newAlpha);
+    tex2dcanvas_out.write(out, gid);
+    
+//    // clear the brush texture
+//    half4 transparent = half4(0,0,0,0);
+//    tex2dbrush.write(transparent, gid);
 }
 
 float2 transformPointCoord(float2 pointCoord, float a, float2 anchor) {

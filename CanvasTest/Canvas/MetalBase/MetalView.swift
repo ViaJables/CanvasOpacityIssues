@@ -40,7 +40,7 @@ open class MetalView: MTKView {
     }
     
     // MARK: - Render
-    
+
     open override func layoutSubviews() {
         super.layoutSubviews()
         brushTarget?.updateBuffer(with: drawableSize)
@@ -61,7 +61,6 @@ open class MetalView: MTKView {
     
     required public init(coder: NSCoder) {
         super.init(coder: coder)
-        setup()
     }
     
     var metalLayer: CAMetalLayer? {
@@ -72,6 +71,12 @@ open class MetalView: MTKView {
     }
     
     open func setup() {
+        print("MetalView: setup")
+        device = sharedDevice
+        isOpaque = false
+        
+        supportsReadWriteTexture = device!.readWriteTextureSupport == .tier2
+        
         resetCanvas()
     }
     
@@ -81,12 +86,16 @@ open class MetalView: MTKView {
             return
         }
         
-        device = sharedDevice
-        isOpaque = false
-        
+        print("MetalView drawableSize:")
         print(drawableSize)
         brushTarget = RenderTarget(size: drawableSize, pixelFormat: colorPixelFormat, device: device)
-        canvasTarget = RenderTarget(size: drawableSize, pixelFormat: colorPixelFormat, device: device)
+        
+        canvasTextures.removeAll()
+        for _ in 0..<canvasTexturesCount {
+            if let newCanvasTexture = brushTarget?.makeEmptyTexture() {
+                canvasTextures.append(newCanvasTexture)
+            }
+        }
         commandQueue = device?.makeCommandQueue()
         
         setupTargetUniforms()
@@ -112,18 +121,25 @@ open class MetalView: MTKView {
         rpd.fragmentFunction = fragment_func
         rpd.colorAttachments[0].pixelFormat = colorPixelFormat
         pipelineState = try device?.makeRenderPipelineState(descriptor: rpd)
-        
-        let transferBrushKernel = library?.makeFunction(name: "kernel_transfer_brush")
+
+        let transferBrushKernelName = (canvasTexturesCount == 1) ? "kernel_transfer_brush_fast" : "kernel_transfer_brush"
+        let transferBrushKernel = library?.makeFunction(name: transferBrushKernelName)
         computePipelineState = try device?.makeComputePipelineState(function: transferBrushKernel!)
         
     }
     
-
-    
     // render target for rendering contents to screen
     internal var brushTarget: RenderTarget?
     internal var brushOpacity: Float = 0
-    internal var canvasTarget: RenderTarget?
+
+    internal var supportsReadWriteTexture: Bool = false
+    // we need 2 textures for devices that don't support read::write access in compute shaders
+    private var canvasTexturesCount: Int { supportsReadWriteTexture ? 1 : 2 }
+    private var currentCanvasTextureIndex = 0
+    private var nextCanvasTextureIndex: Int {
+        (currentCanvasTextureIndex + 1) % canvasTexturesCount
+    }
+    internal var canvasTextures = [MTLTexture?]()
     
     private var commandQueue: MTLCommandQueue?
     
@@ -151,13 +167,12 @@ open class MetalView: MTKView {
     open override func draw(_ rect: CGRect) {
         super.draw(rect)
         guard
-            let canvasTarget = canvasTarget,
             let brushTarget = brushTarget,
-            canvasTarget.modified || brushTarget.modified,
-            let canvasTexture = canvasTarget.texture,
-            let brushTexture = brushTarget.texture
+            brushTarget.modified,
+            let brushTexture = brushTarget.texture,
+            let canvasTexture = canvasTextures[currentCanvasTextureIndex]
             else { return }
-        
+
         let renderPassDescriptor = MTLRenderPassDescriptor()
         
         guard
@@ -184,7 +199,7 @@ open class MetalView: MTKView {
         /// current Brush opacity
         commandEncoder.setFragmentBytes(&brushOpacity, length: MemoryLayout<Float>.stride, index: 0)
 
-        commandEncoder.setFragmentSamplerState(canvasTarget.samplerState, index: 0)
+        commandEncoder.setFragmentSamplerState(brushTarget.samplerState, index: 0)
         commandEncoder.setFragmentSamplerState(brushTarget.samplerState, index: 1)
         commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
     
@@ -194,41 +209,52 @@ open class MetalView: MTKView {
         }
         commandBuffer.commit()
         
-        canvasTarget.modified = false
+//        canvasTarget.modified = false
     }
     
     func transferBrushToCanvas() {
-//        print("transferBrushToCanvas")
 
         guard
-            let canvasTarget = canvasTarget,
             let brushTarget = brushTarget,
-            let canvasTexture = canvasTarget.texture,
-            let brushTexture = brushTarget.texture
-            else { return }
-        
-        guard
+            let canvasTextureIn = canvasTextures[currentCanvasTextureIndex],
+            let brushTexture = brushTarget.texture,
             let commandBuffer = commandQueue?.makeCommandBuffer(),
             let commandEncoder = commandBuffer.makeComputeCommandEncoder()
             else { return }
-                
+
+        
         commandEncoder.setComputePipelineState(computePipelineState!)
-        /// canvas
-        commandEncoder.setTexture(canvasTexture, index: 0)
+
         /// current brush
-        commandEncoder.setTexture(brushTexture, index: 1)
+        commandEncoder.setTexture(brushTexture, index: 0)
+        /// canvas in
+        commandEncoder.setTexture(canvasTextureIn, index: 1)
+        
+        if !supportsReadWriteTexture {
+            /// canvas out
+            let canvasTextureOut = canvasTextures[nextCanvasTextureIndex]!
+            commandEncoder.setTexture(canvasTextureOut, index: 2)
+        }
+        
         /// pass the current Brush opacity to the shader
         commandEncoder.setBytes(&brushOpacity, length: MemoryLayout<Float>.stride, index: 0)
         
         let threadGroupCounts = MTLSizeMake(8, 8, 1);
-        let threadGroups = MTLSizeMake(canvasTexture.width  / threadGroupCounts.width,
-                                       canvasTexture.height / threadGroupCounts.height,
+        let threadGroups = MTLSizeMake(brushTexture.width  / threadGroupCounts.width,
+                                       brushTexture.height / threadGroupCounts.height,
                                        1);
         commandEncoder.dispatchThreadgroups(threadGroups, threadsPerThreadgroup: threadGroupCounts)
                 
         commandEncoder.endEncoding()
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted()
+        
+        if !supportsReadWriteTexture {
+            // switch to the next canvas texture
+            currentCanvasTextureIndex = nextCanvasTextureIndex
+            // clear the brush texture
+            brushTexture.clear()
+        }
 
     }
     

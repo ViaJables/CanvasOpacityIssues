@@ -14,43 +14,47 @@ class ViewController: UIViewController {
     @IBOutlet weak var opacitySlider: UISlider!
     
     private func registerBrush(with imageName: String) throws -> Brush {
-           let texture = try canvas.makeTexture(with: UIImage(named: imageName)!.pngData()!)
-           return try canvas.registerBrush(name: imageName, textureID: texture.id)
-       }
-       
-      
-       
-       override func viewDidLoad() {
-           super.viewDidLoad()
-           navigationController?.interactivePopGestureRecognizer?.isEnabled = false
-           
-           // Other Setup
-           registerBrushes()
+        let texture = try canvas.makeTexture(with: UIImage(named: imageName)!.pngData()!)
+        return try canvas.registerBrush(name: imageName, textureID: texture.id)
+    }
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         
-       }
-       
-       func registerBrushes() {
-           do {
-               let pen = canvas.defaultBrush!
-               pen.name = "Pen"
-               pen.opacity = 1
-               pen.pointSize = 150
-               pen.pointStep = 0.5
-               pen.forceSensitive = 1
-                pen.color = .black
-               pen.use()
-               
-               
-           } catch MLError.simulatorUnsupported {
-               // No simulator support
-           } catch {
-               // Other errors
-           }
-           
-
-           
-           
-       }
+        print("ViewController:viewDidLoad")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        // note: calling canvas.setup before this point will create the canvas at the size defined in the storyboard
+        canvas.setup()
+        // Other Setup
+        registerBrushes()
+    }
+    
+    func registerBrushes() {
+        do {
+            let pen = canvas.defaultBrush!
+            pen.name = "Pen"
+            pen.opacity = 1
+            pen.pointSize = 150
+            pen.pointStep = 0.5
+            pen.forceSensitive = 1
+            pen.color = .black
+            pen.use()
+            
+            
+        } catch MLError.simulatorUnsupported {
+            // No simulator support
+        } catch {
+            // Other errors
+        }
+        
+        
+        
+        
+    }
     
     @IBAction func opacityChanged(_ sender: Any) {
         

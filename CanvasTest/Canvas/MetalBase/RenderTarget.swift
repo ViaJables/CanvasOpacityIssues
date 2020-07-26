@@ -37,7 +37,7 @@ open class RenderTarget {
             updateTransformBuffer()
         }
     }
-    
+        
     /// create with texture and device
     public init(size: CGSize, pixelFormat: MTLPixelFormat, device: MTLDevice?) {
         
@@ -69,10 +69,14 @@ open class RenderTarget {
     
     /// clear the contents of texture
     open func clear() {
-        texture = makeEmptyTexture()
-        renderPassDescriptor?.colorAttachments[0].texture = texture
-        commitCommands()
+///  this is very expensive, as it recreates the texture instead of just clearing it.
+//        texture = makeEmptyTexture()
+//        renderPassDescriptor?.colorAttachments[0].texture = texture
         
+/// clearing the texture instead
+        texture?.clear()
+
+        commitCommands()
     }
     
     internal var pixelFormat: MTLPixelFormat = .bgra8Unorm
@@ -126,12 +130,13 @@ open class RenderTarget {
         commandBuffer = nil
         modified = true
     }
-    
+        
     // make empty texture
-    internal func makeEmptyTexture() -> MTLTexture? {
+    open func makeEmptyTexture() -> MTLTexture? {
         guard drawableSize.width * drawableSize.height > 0 else {
             return nil
         }
+        
         let textureDescriptor = MTLTextureDescriptor.texture2DDescriptor(pixelFormat: .bgra8Unorm,
                                                                          width: Int(drawableSize.width),
                                                                          height: Int(drawableSize.height),

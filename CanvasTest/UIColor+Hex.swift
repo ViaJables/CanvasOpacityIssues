@@ -2,7 +2,7 @@ import UIKit
 
 extension UIColor {
     convenience init(hexString:String) {
-        let scanner            = Scanner(string: hexString)
+        let scanner = Scanner(string: hexString)
         
         if (hexString.hasPrefix("#")) {
             scanner.scanLocation = 1

@@ -227,6 +227,7 @@ open class Canvas: MetalView {
     
     public func undo() {
         if let data = data, data.undo() {
+            print("undo")
             redraw()
         }
     }
@@ -272,18 +273,22 @@ open class Canvas: MetalView {
             else { return }
         
         data.finishCurrentElement()
-        
-        //TODO: using drawableSize creates a smaller texture
-        print("Redraw \(drawableSize)")
+
         target.updateBuffer(with: drawableSize)
+
         target.clear()
-        data.elements.forEach { $0.drawSelf(on: target) }
+        canvasTextures.forEach { $0?.clear() }
+        
+        data.elements.forEach {
+            $0.drawSelf(on: target)
+            // TODO: this must be tested
+            transferBrushToCanvas()
+        }
         /// submit commands
         target.commitCommands()
         
         //actionObservers.canvas(self, didRedrawOn: target)
     }
-    
     
     
     // MARK: - Bezier
@@ -361,7 +366,7 @@ open class Canvas: MetalView {
     ///   - size: size of texture
     ///   - textureID: id of texture for drawing
     ///   - rotation: rotation angle of texture for drawing
-    open func DEAD_CODE_renderChartlet(at point: CGPoint, size: CGSize, textureID: String, rotation: CGFloat = 0) {
+    open func renderChartlet(at point: CGPoint, size: CGSize, textureID: String, rotation: CGFloat = 0) {
         
         let chartlet = Chartlet(center: point, size: size, textureID: textureID, angle: rotation, canvas: self)
         
@@ -447,7 +452,7 @@ open class Canvas: MetalView {
         if bezierGenerator.points.count == 1 {
             let distance = CGPointDistance(from: bezierGenerator.points.last!, to: pan.point)
             if distance > 50.0 {
-                print("twoFingerTapDetected") // TODO: this logic seems wrong
+                print("twoFingerTapDetected")
                 twoFingerTapDetected = true
                 undo()
                 return
