@@ -47,7 +47,7 @@ open class Brush {
     open private(set) weak var target: Canvas?
 
     // opacity of texture, affects the darkness of stroke
-    open var opacity: CGFloat = 0.3 {
+    open var opacity: CGFloat = 1 {
         didSet {
             updateRenderingColor()
         }
@@ -96,7 +96,12 @@ open class Brush {
     
     // called when color or opacity changed
     private func updateRenderingColor() {
-        renderingColor = color.toMLColor(opacity: opacity)
+
+        /// use full opacity, draw to brushTexture and at the end of the stroke transfer brush to canvas with the brushe's opacity
+        renderingColor = color.toMLColor(opacity: 1.0)
+
+        /// older code
+//        renderingColor = color.toMLColor(opacity: opacity)
     }
     
     // designed initializer, will be called by target when reigster called
@@ -148,11 +153,11 @@ open class Brush {
     }
 
     private var canvasScale: CGFloat {
-        return target?.screenTarget?.scale ?? 1
+        return target?.brushTarget?.scale ?? 1
     }
     
     private var canvasOffset: CGPoint {
-        return target?.screenTarget?.contentOffset ?? .zero
+        return target?.brushTarget?.contentOffset ?? .zero
     }
     
     // MARK: - Render tools
@@ -190,7 +195,7 @@ open class Brush {
         attachment.sourceRGBBlendFactor = .sourceAlpha
         attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
         
-        attachment.alphaBlendOperation = .add
+        attachment.alphaBlendOperation = .max
         attachment.sourceAlphaBlendFactor = .one
         attachment.destinationAlphaBlendFactor = .oneMinusSourceAlpha
     }
@@ -217,10 +222,10 @@ open class Brush {
         pipelineState = try! device.makeRenderPipelineState(descriptor: rpd)
     }
 
-    /// render a specifyed line strip by this brush
+    /// render a specified line strip by this brush
     internal func render(lineStrip: LineStrip, on renderTarget: RenderTarget? = nil) {
-        
-        let renderTarget = renderTarget ?? target?.screenTarget
+//        print("render linestrip on target")
+        let renderTarget = renderTarget ?? target?.brushTarget
         
         guard lineStrip.lines.count > 0, let target = renderTarget else {
             return
@@ -230,27 +235,34 @@ open class Brush {
         target.prepareForDraw()
         
         /// get commandEncoder form resuable command buffer
-        let commandEncoder = target.makeCommandEncoder()
-        
-        commandEncoder?.setRenderPipelineState(pipelineState)
-        
-        if let vertex_buffer = lineStrip.retrieveBuffers(rotation: rotation) {
-            commandEncoder?.setVertexBuffer(vertex_buffer, offset: 0, index: 0)
-            commandEncoder?.setVertexBuffer(target.uniform_buffer, offset: 0, index: 1)
-            commandEncoder?.setVertexBuffer(target.transform_buffer, offset: 0, index: 2)
-            if let texture = texture {
-                commandEncoder?.setFragmentTexture(texture, index: 0)
-            }
-            commandEncoder?.drawPrimitives(type: .point, vertexStart: 0, vertexCount: lineStrip.vertexCount)
+        guard
+            let commandEncoder = target.makeCommandEncoder()
+            else { return }
+
+        commandEncoder.setRenderPipelineState(pipelineState)
+
+        defer {
+            commandEncoder.endEncoding()
         }
         
-        commandEncoder?.endEncoding()
+        guard
+            let vertex_buffer = lineStrip.retrieveBuffers(rotation: rotation)
+            else { return }
+        
+        commandEncoder.setVertexBuffer(vertex_buffer, offset: 0, index: 0)
+        commandEncoder.setVertexBuffer(target.uniform_buffer, offset: 0, index: 1)
+        commandEncoder.setVertexBuffer(target.transform_buffer, offset: 0, index: 2)
+        if let texture = texture {
+            commandEncoder.setFragmentTexture(texture, index: 0)
+        }
+        commandEncoder.drawPrimitives(type: .point, vertexStart: 0, vertexCount: lineStrip.vertexCount)
+        
     }
     
-    /// render a specifyed line strip by this brush
+    /// render a specified line strip by this brush
     internal func render(buffer: MTLBuffer, commandEncoder: MTLRenderCommandEncoder, vertexCount: Int = 1, on renderTarget: RenderTarget? = nil) {
-        
-        let renderTarget = renderTarget ?? target?.screenTarget
+        print("render buffer commandEncoder vtxCount on target")
+        let renderTarget = renderTarget ?? target?.brushTarget
         
         guard let target = renderTarget else {
             return

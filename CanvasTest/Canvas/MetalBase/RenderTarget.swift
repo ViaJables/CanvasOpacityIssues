@@ -14,7 +14,11 @@ import simd
 open class RenderTarget {
     
     /// texture to render on
-    public private(set) var texture: MTLTexture?
+    public private(set) var texture: MTLTexture? {
+        didSet {
+            print("TEXTURE WAS SET")
+        }
+    }
     
     public let samplerState: MTLSamplerState
     /// the scale level of view, all things scales
@@ -61,6 +65,7 @@ open class RenderTarget {
         
         updateBuffer(with: size)
     }
+
     
     /// clear the contents of texture
     open func clear() {
@@ -82,11 +87,11 @@ open class RenderTarget {
     
     internal func updateBuffer(with size: CGSize) {
         self.drawableSize = size
-        let metrix = Matrix.identity
+        let matrix = Matrix.identity
         let zoomUniform = 2 * Float(zoom / scale )
-        metrix.scaling(x: zoomUniform  / Float(size.width), y: -zoomUniform / Float(size.height), z: 1)
-        metrix.translation(x: -1, y: 1, z: 0)
-        uniform_buffer = device?.makeBuffer(bytes: metrix.m, length: MemoryLayout<Float>.size * 16, options: [])
+        matrix.scaling(x: zoomUniform  / Float(size.width), y: -zoomUniform / Float(size.height), z: 1)
+        matrix.translation(x: -1, y: 1, z: 0)
+        uniform_buffer = device?.makeBuffer(bytes: matrix.m, length: MemoryLayout<Float>.size * 16, options: [])
         
         updateTransformBuffer()
     }
@@ -122,7 +127,7 @@ open class RenderTarget {
         modified = true
     }
     
-    // make empty testure
+    // make empty texture
     internal func makeEmptyTexture() -> MTLTexture? {
         guard drawableSize.width * drawableSize.height > 0 else {
             return nil
@@ -131,7 +136,7 @@ open class RenderTarget {
                                                                          width: Int(drawableSize.width),
                                                                          height: Int(drawableSize.height),
                                                                          mipmapped: false)
-        textureDescriptor.usage = [.renderTarget, .shaderRead]
+        textureDescriptor.usage = [.renderTarget, .shaderRead, .shaderWrite]
         let texture = device?.makeTexture(descriptor: textureDescriptor)
         texture?.clear()
         return texture

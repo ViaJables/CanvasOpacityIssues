@@ -56,16 +56,16 @@ open class LineStrip: CanvasElement {
     }
     
     public func clearCanvas() {
-        guard let renderTarget = brush?.target?.screenTarget else { return }
+        guard let renderTarget = brush?.target?.brushTarget else { return }
         renderTarget.clear()
     }
     
-    public func draw(on target: RenderTarget?, scaleFactor: Double) {
+    public func DEAD_CODE_draw(on target: RenderTarget?, scaleFactor: Double) {
         guard lines.count > 0 else {
             return
         }
         
-        var vertexes: [Point] = []
+        var vertices: [Point] = []
         
         lines.forEach { (line) in
             let scale = brush?.target?.contentScaleFactor ?? UIScreen.main.nativeScale
@@ -88,27 +88,27 @@ open class LineStrip: CanvasElement {
                     break
                 }
                 
-                vertexes.append(Point(x: x, y: y, color: line.color ?? color, size: (line.pointSize * CGFloat(scaleFactor)) * scale, angle: angle))
+                vertices.append(Point(x: x, y: y, color: line.color ?? color, size: (line.pointSize * CGFloat(scaleFactor)) * scale, angle: angle))
             }
         }
         
-        guard let renderTarget = brush?.target?.screenTarget else { return }
+        guard let renderTarget = brush?.target?.brushTarget else { return }
         renderTarget.prepareForDraw()
         
         guard let commandEncoder = renderTarget.makeCommandEncoder() else { return }
         commandEncoder.endEncoding()
         
-        if let vertex_buffer = sharedDevice?.makeBuffer(bytes: vertexes, length: MemoryLayout<Point>.stride * vertexes.count, options: .cpuCacheModeWriteCombined) {
+        if let vertex_buffer = sharedDevice?.makeBuffer(bytes: vertices, length: MemoryLayout<Point>.stride * vertices.count, options: .cpuCacheModeWriteCombined) {
 
             DispatchQueue.main.async {
-                self.brush?.render(buffer: vertex_buffer, commandEncoder: commandEncoder, vertexCount: vertexes.count)
+                self.brush?.render(buffer: vertex_buffer, commandEncoder: commandEncoder, vertexCount: vertices.count)
                 renderTarget.commitCommands()
             }
         }
     }
-    
+//
 
-    
+//
     /// get vertex buffer for this line strip, remake if not exists
     open func retrieveBuffers(rotation: Brush.Rotation) -> MTLBuffer? {
         if vertex_buffer == nil {
@@ -128,7 +128,7 @@ open class LineStrip: CanvasElement {
                 return
             }
             
-            var vertexes: [Point] = []
+            var vertices: [Point] = []
             
             lines.forEach { (line) in
                 let scale = brush?.target?.contentScaleFactor ?? UIScreen.main.nativeScale
@@ -137,10 +137,10 @@ open class LineStrip: CanvasElement {
                 line.end = line.end * scale
                 let count = max(line.length / line.pointStep, 1)
                 
-                // fix opacity of line color
-                let overlapping = max(1, line.pointSize / line.pointStep)
+//                 fix opacity of line color
+//                let overlapping = max(1, line.pointSize / line.pointStep)
                 var renderingColor = line.color ?? color
-                renderingColor.alpha = renderingColor.alpha / Float(overlapping) * 2.5
+//                renderingColor.alpha = renderingColor.alpha / Float(overlapping) * 2.5
                 
                 for i in 0 ..< Int(count) {
                     let index = CGFloat(i)
@@ -154,12 +154,12 @@ open class LineStrip: CanvasElement {
                     case .ahead: angle = line.angle
                     }
                     
-                    vertexes.append(Point(x: x, y: y, color: renderingColor, size: line.pointSize * scale, angle: angle))
+                    vertices.append(Point(x: x, y: y, color: renderingColor, size: line.pointSize * scale, angle: angle))
                 }
             }
             
-            vertexCount = vertexes.count
-            vertex_buffer = sharedDevice?.makeBuffer(bytes: vertexes, length: MemoryLayout<Point>.stride * vertexCount, options: .cpuCacheModeWriteCombined)
+            vertexCount = vertices.count
+            vertex_buffer = sharedDevice?.makeBuffer(bytes: vertices, length: MemoryLayout<Point>.stride * vertexCount, options: .cpuCacheModeWriteCombined)
         }
     
     // MARK: - Coding

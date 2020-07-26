@@ -39,9 +39,10 @@ open class Canvas: MetalView {
     open var isSamplingColor = false
     open var twoFingerTapDetected = false
     
-    /// the actural size of canvas in points, may larger than current bounds
+    /// the actual size of canvas in points, may be larger than current bounds
     /// size must between bounds size and 5120x5120
     open var size: CGSize {
+        print("Canvas size: \(drawableSize) / \(contentScaleFactor)")
         return drawableSize / contentScaleFactor
     }
     
@@ -126,37 +127,37 @@ open class Canvas: MetalView {
         return textures.first { $0.id == id }
     }
     
-    @available(*, deprecated, message: "this property will be removed soon, set the property forceSensitive on brush to 0 instead, changing this value will cause no affects")
+    @available(*, deprecated, message: "this property will be removed soon, set the property forceSensitive on brush to 0 instead, changing this value will cause no effects")
     open var forceEnabled: Bool = true
     
     // MARK: - Zoom and scale
     /// the scale level of view, all things scales
     open var scale: CGFloat {
         get {
-            return screenTarget?.scale ?? 1
+            return brushTarget?.scale ?? 1
         }
         set {
-            screenTarget?.scale = newValue
+            brushTarget?.scale = newValue
         }
     }
     
     /// the zoom level of render target, only scale render target
     open var zoom: CGFloat {
         get {
-            return screenTarget?.zoom ?? 1
+            return brushTarget?.zoom ?? 1
         }
         set {
-            screenTarget?.zoom = newValue
+            brushTarget?.zoom = newValue
         }
     }
     
     /// the offset of render target with zoomed size
     open var contentOffset: CGPoint {
         get {
-            return screenTarget?.contentOffset ?? .zero
+            return brushTarget?.contentOffset ?? .zero
         }
         set {
-            screenTarget?.contentOffset = newValue
+            brushTarget?.contentOffset = newValue
         }
     }
     
@@ -261,15 +262,18 @@ open class Canvas: MetalView {
     }
     
     /// redraw elemets in document
-    /// - Attention: thie method must be called on main thread
+    /// - Attention: this method must be called on main thread
     open func redraw(on target: RenderTarget? = nil) {
-        
-        guard let target = target ?? screenTarget else {
-            return
+        guard Thread.isMainThread else {
+            fatalError("redraw not called on MainThread")
         }
+        
+        guard let target = target ?? brushTarget
+            else { return }
         
         data.finishCurrentElement()
         
+        //TODO: using drawableSize creates a smaller texture
         print("Redraw \(drawableSize)")
         target.updateBuffer(with: drawableSize)
         target.clear()
@@ -316,7 +320,12 @@ open class Canvas: MetalView {
                 lastRenderedPan = pan
             }
         }
+        
         render(lines: lines)
+
+        if isEnd {
+            transferBrushToCanvas()
+        }
     }
     
     // MARK: - Rendering
@@ -325,11 +334,13 @@ open class Canvas: MetalView {
         lessonData.append(lines: lines, with: currentBrush)
         // create a temporary line strip and draw it on canvas
         let date = NSDate().timeIntervalSince1970
-        LineStrip(lines: lines, brush: currentBrush, startTime: date, endTime: date).drawSelf(on: screenTarget)
+        LineStrip(lines: lines, brush: currentBrush, startTime: date, endTime: date).drawSelf(on: brushTarget)
+
         /// submit commands
-        screenTarget?.commitCommands()
+        brushTarget?.commitCommands()
+        brushOpacity = Float(currentBrush.opacity)
     }
-    
+        
     open func renderTap(at point: CGPoint, to: CGPoint? = nil) {
         
         guard renderingDelegate?.canvas(self, shouldRenderTapAt: point) ?? true else {
@@ -339,6 +350,8 @@ open class Canvas: MetalView {
         let brush = currentBrush!
         let lines = brush.makeLine(from: point, to: to ?? point)
         render(lines: lines)
+        
+        transferBrushToCanvas()
     }
     
     /// draw a chartlet to canvas
@@ -348,7 +361,7 @@ open class Canvas: MetalView {
     ///   - size: size of texture
     ///   - textureID: id of texture for drawing
     ///   - rotation: rotation angle of texture for drawing
-    open func renderChartlet(at point: CGPoint, size: CGSize, textureID: String, rotation: CGFloat = 0) {
+    open func DEAD_CODE_renderChartlet(at point: CGPoint, size: CGSize, textureID: String, rotation: CGFloat = 0) {
         
         let chartlet = Chartlet(center: point, size: size, textureID: textureID, angle: rotation, canvas: self)
         
@@ -357,8 +370,8 @@ open class Canvas: MetalView {
         }
         
         data.append(chartlet: chartlet)
-        chartlet.drawSelf(on: screenTarget)
-        screenTarget?.commitCommands()
+        chartlet.drawSelf(on: brushTarget)
+        brushTarget?.commitCommands()
         setNeedsDisplay()
         
         actionObservers.canvas(self, didRenderChartlet: chartlet)
@@ -434,6 +447,7 @@ open class Canvas: MetalView {
         if bezierGenerator.points.count == 1 {
             let distance = CGPointDistance(from: bezierGenerator.points.last!, to: pan.point)
             if distance > 50.0 {
+                print("twoFingerTapDetected") // TODO: this logic seems wrong
                 twoFingerTapDetected = true
                 undo()
                 return
@@ -458,14 +472,11 @@ open class Canvas: MetalView {
             return
         }
         
-        
         if touches.count > 1 { return }
         
         guard let touch = firstAvaliableTouch(from: touches) else {
             return
         }
-        
-
         
         if isSamplingColor {
             if let color = getColor(point: touch.location(in: self)) {
@@ -473,14 +484,7 @@ open class Canvas: MetalView {
             }
             return
         }
-        
-        defer {
-            bezierGenerator.finish()
-            lastRenderedPan = nil
-            data.finishCurrentElement()
-            lessonData.finishCurrentElement()
-        }
-        
+
         let pan = Pan(touch: touch, on: self)
         let count = bezierGenerator.points.count
         
@@ -494,7 +498,13 @@ open class Canvas: MetalView {
         if unfishedLines.count > 0 {
             render(lines: unfishedLines)
         }
+
         actionObservers.canvas(self, didFinishLineAt: pan.point, force: pan.force)
+        
+        bezierGenerator.finish()
+        lastRenderedPan = nil
+        data.finishCurrentElement()
+        lessonData.finishCurrentElement()
     }
     
     private func firstAvaliableTouch(from touches: Set<UITouch>) -> UITouch? {

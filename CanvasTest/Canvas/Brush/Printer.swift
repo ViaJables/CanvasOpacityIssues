@@ -38,7 +38,7 @@ public final class Printer: Brush {
 
     internal func render(chartlet: Chartlet, on renderTarget: RenderTarget? = nil) {
         
-        guard let target = renderTarget ?? self.target?.screenTarget else {
+        guard let target = renderTarget ?? self.target?.brushTarget else {
             return
         }
         
