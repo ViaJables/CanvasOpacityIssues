@@ -130,9 +130,8 @@ kernel void kernel_transfer_brush(texture2d<half, access::read> tex2dbrush [[ te
     if (newAlpha == 0) {
         newColor = half3(0,0,0);
     } else {
-//        newColor = src.rgb * src.a + dst.rgb;
-        newColor = (src.rgb + dst.rgb * (1 - src.a)); // newAlpha;
-//        newColor = (src.rgb * src.a) + (dst.rgb * (1 - src.a)); // newAlpha;
+//        newColor = (src.rgb + dst.rgb * (1 - src.a)); // newAlpha;
+        newColor = (src.rgb * src.a) + (dst.rgb * (1 - src.a)); // newAlpha;
     }
     half4 out = half4(newColor, newAlpha);
     tex2dcanvas_out.write(out, gid);

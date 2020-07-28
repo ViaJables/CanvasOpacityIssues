@@ -131,7 +131,7 @@ open class MetalView: MTKView {
         // rgb
         bpd.colorAttachments[0].isBlendingEnabled = true
 
-        bpd.colorAttachments[0].sourceRGBBlendFactor = .one
+        bpd.colorAttachments[0].sourceRGBBlendFactor = .sourceAlpha
         bpd.colorAttachments[0].rgbBlendOperation = .add
         bpd.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
         // alpha

@@ -52,21 +52,5 @@
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "2BA2E2E8-0203-40C6-BD2A-0E4F58FB7970"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CanvasTest/Canvas/MetalBase/Shaders.metal"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "kernel_transfer_brush(texture2d&lt;half, access::read&gt; tex2dbrush [[ texture(0) ]], texture2d&lt;half, access::read&gt; tex2dcanvas_in [[ texture(1) ]], texture2d&lt;half, access::write&gt; tex2dcanvas_out [[ texture(2) ]], constant float &amp;brushOpacity [[ buffer(0) ]], uint2 gid [[thread_position_in_grid]])"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>
