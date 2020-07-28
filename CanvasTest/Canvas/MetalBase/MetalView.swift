@@ -244,8 +244,6 @@ open class MetalView: MTKView {
             let commandBuffer = commandQueue?.makeCommandBuffer(),
             let commandEncoder = commandBuffer.makeComputeCommandEncoder()
             else { return }
-
-        print("transferBrushToCanvas")
         
         commandEncoder.setComputePipelineState(computePipelineState!)
 

@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         do {
             let pencil = try registerBrush(with: "Pencil")
             pencil.rotation = .random
-            pencil.pointSize = 256
+            pencil.pointSize = 40
             pencil.pointStep = 2
             pencil.forceSensitive = 1
             pencil.opacity = 1

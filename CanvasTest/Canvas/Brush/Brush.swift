@@ -187,29 +187,20 @@ open class Brush {
     open func setupBlendOptions(for attachment: MTLRenderPipelineColorAttachmentDescriptor) {
         attachment.isBlendingEnabled = true
 
-//        attachment.rgbBlendOperation = .add
-//        attachment.sourceRGBBlendFactor = .sourceAlpha
-//        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
-//
-//        attachment.alphaBlendOperation = .max
-//        attachment.sourceAlphaBlendFactor = .one
-//        attachment.destinationAlphaBlendFactor = .one
-
         // RGB
-        attachment.sourceRGBBlendFactor = .sourceAlpha // SOURCE(brush color) * 1
-        attachment.rgbBlendOperation = .add            // +
-        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha // DEST(target) * (1 - SOURCE.ALPHA)
+        attachment.sourceRGBBlendFactor = .sourceAlpha
+        attachment.rgbBlendOperation = .max
+        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
 
         // alpha
         attachment.sourceAlphaBlendFactor = .one
-        attachment.alphaBlendOperation = .add
-        attachment.destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        attachment.alphaBlendOperation = .max
+        attachment.destinationAlphaBlendFactor = .zero
     }
     
     // MARK: - Render Actions
 
     private func updatePointPipeline() {
-        print("updatePointPipeline")
         guard let target = target, let device = target.device, let library = makeShaderLibrary(from: device) else {
             return
         }

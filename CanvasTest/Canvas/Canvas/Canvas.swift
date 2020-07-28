@@ -119,10 +119,6 @@ open class Canvas: MetalView {
         }
         let texture = try super.makeTexture(with: data, id: id)
         textures.append(texture)
-        textures.forEach {
-            let i = $0.texture.toUIImage()
-            addSubview(UIImageView(image: i))
-        }
         return texture
     }
     

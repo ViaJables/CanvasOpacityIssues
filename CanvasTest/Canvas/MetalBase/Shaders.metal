@@ -64,6 +64,23 @@ fragment float4 fragment_brush_render_target(Vertex vertex_data [[ stage_in ]],
 };
 
 
+//MARK: - transfer brush to canvas
+
+half4 blendBrush(half4 src, half4 dst, float brushOpacity) {
+    // multiply by brush opacity
+    src.a *= brushOpacity;
+    
+    half newAlpha = src.a + dst.a * (1 - src.a);
+    half3 newColor;
+    if (newAlpha == 0) {
+        newColor = half3(0,0,0);
+    } else {
+        newColor = (src.rgb * src.a) + (dst.rgb * (1 - src.a));
+    }
+    return half4(newColor, newAlpha);
+}
+
+/// for modern devices, supporting read:write
 kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2dbrush [[ texture(0) ]],
                                       texture2d<half, access::read_write> tex2dcanvas [[ texture(1) ]],
                                       constant float &brushOpacity [[ buffer(0) ]],
@@ -77,23 +94,7 @@ kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2d
     half4 dst = tex2dcanvas.read(gid);
     half4 src = tex2dbrush.read(gid);
     
-    // divide by alpha
-    src.rgb /= src.a;
-    // multiply by brush opacity
-    src.a *= brushOpacity;
-    // multiply rgb by alpha
-    src.rgb *= src.a;
-
-    // compute the blended brush + canvas
-    // https://en.wikipedia.org/wiki/Alpha_compositing
-    half newAlpha = src.a + dst.a * (1 - src.a);
-    half3 newColor;
-    if (newAlpha == 0) {
-        newColor = 0;
-    } else {
-        newColor = (src.rgb + dst.rgb * (1 - src.a));
-    }
-    half4 out = half4(newColor, newAlpha);
+    half4 out = blendBrush(src, dst, brushOpacity);
     tex2dcanvas.write(out, gid);
 
     // clear the brush texture
@@ -101,6 +102,7 @@ kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2d
     tex2dbrush.write(transparent, gid);
 }
 
+/// for older devices
 kernel void kernel_transfer_brush(texture2d<half, access::read> tex2dbrush [[ texture(0) ]],
                                   texture2d<half, access::read> tex2dcanvas_in [[ texture(1) ]],
                                   texture2d<half, access::write> tex2dcanvas_out [[ texture(2) ]],
@@ -114,26 +116,8 @@ kernel void kernel_transfer_brush(texture2d<half, access::read> tex2dbrush [[ te
     
     half4 dst = tex2dcanvas_in.read(gid);
     half4 src = tex2dbrush.read(gid);
-    
-    // divide by alpha
-//    src.rgb /= src.a;
-    // multiply by brush opacity
-    src.a *= brushOpacity;
-    // multiply rgb by alpha
-//    src.rgb *= src.a;
-
-    
-    // compute the blended brush + canvas
-    // https://en.wikipedia.org/wiki/Alpha_compositing
-    half newAlpha = src.a + dst.a * (1 - src.a);
-    half3 newColor;
-    if (newAlpha == 0) {
-        newColor = half3(0,0,0);
-    } else {
-//        newColor = (src.rgb + dst.rgb * (1 - src.a)); // newAlpha;
-        newColor = (src.rgb * src.a) + (dst.rgb * (1 - src.a)); // newAlpha;
-    }
-    half4 out = half4(newColor, newAlpha);
+        
+    half4 out = blendBrush(src, dst, brushOpacity);
     tex2dcanvas_out.write(out, gid);
 }
 
@@ -145,9 +129,9 @@ float2 transformPointCoord(float2 pointCoord, float a, float2 anchor) {
     return float2(x, y) + anchor;
 }
 
-//======================================
-// Printer Shaders
-//======================================
+
+// MARK: - Printer Shader
+
 vertex Vertex vertex_printer_func(constant Vertex *vertices [[ buffer(0) ]],
                                   constant Uniforms &uniforms [[ buffer(1) ]],
                                   constant Transform &transform [[ buffer(2) ]],
@@ -160,6 +144,7 @@ vertex Vertex vertex_printer_func(constant Vertex *vertices [[ buffer(0) ]],
     out.position = uniforms.scaleMatrix * float4(pos, 0, 1);// * in.position;
     return out;
 };
+
 
 //======================================
 // Point Shaders
@@ -187,7 +172,6 @@ fragment half4 fragment_point_func(Point point_data [[ stage_in ]],
 {
     constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
     float2 text_coord = transformPointCoord(pointCoord, point_data.angle, float2(0.5));
-//    float2 text_coord = transformPointCoord(pointCoord, 0, float2(0.5));
     half4 brush = half4(tex2d.sample(textureSampler, text_coord));
 
     half outAlpha = brush.a;
