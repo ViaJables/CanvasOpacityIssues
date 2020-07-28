@@ -110,6 +110,7 @@ open class MetalView: MTKView {
     // pipeline state
     
     private var pipelineState: MTLRenderPipelineState!
+    private var brushPipelineState: MTLRenderPipelineState!
     private var computePipelineState: MTLComputePipelineState!
 
     private func setupPiplineState() throws {
@@ -122,6 +123,24 @@ open class MetalView: MTKView {
         rpd.colorAttachments[0].pixelFormat = colorPixelFormat
         pipelineState = try device?.makeRenderPipelineState(descriptor: rpd)
 
+        let fragment_func_brush = library?.makeFunction(name: "fragment_brush_render_target")
+        let bpd = MTLRenderPipelineDescriptor()
+        bpd.vertexFunction = vertex_func
+        bpd.fragmentFunction = fragment_func_brush
+        bpd.colorAttachments[0].pixelFormat = colorPixelFormat
+        // rgb
+        bpd.colorAttachments[0].isBlendingEnabled = true
+
+        bpd.colorAttachments[0].sourceRGBBlendFactor = .one
+        bpd.colorAttachments[0].rgbBlendOperation = .add
+        bpd.colorAttachments[0].destinationRGBBlendFactor = .oneMinusSourceAlpha
+        // alpha
+        bpd.colorAttachments[0].sourceAlphaBlendFactor = .one
+        bpd.colorAttachments[0].alphaBlendOperation = .add
+        bpd.colorAttachments[0].destinationAlphaBlendFactor = .oneMinusSourceAlpha
+        
+        brushPipelineState = try device?.makeRenderPipelineState(descriptor: bpd)
+        
         let transferBrushKernelName = (canvasTexturesCount == 1) ? "kernel_transfer_brush_fast" : "kernel_transfer_brush"
         let transferBrushKernel = library?.makeFunction(name: transferBrushKernelName)
         computePipelineState = try device?.makeComputePipelineState(function: transferBrushKernel!)
@@ -194,15 +213,19 @@ open class MetalView: MTKView {
         commandEncoder.setVertexBuffer(render_target_uniform, offset: 0, index: 1)
         /// canvas
         commandEncoder.setFragmentTexture(canvasTexture, index: 0)
-        /// current brush
-        commandEncoder.setFragmentTexture(brushTexture, index: 1)
-        /// current Brush opacity
-        commandEncoder.setFragmentBytes(&brushOpacity, length: MemoryLayout<Float>.stride, index: 0)
 
         commandEncoder.setFragmentSamplerState(brushTarget.samplerState, index: 0)
-        commandEncoder.setFragmentSamplerState(brushTarget.samplerState, index: 1)
         commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
-    
+
+        // second draw call - brush
+        commandEncoder.setRenderPipelineState(brushPipelineState)
+        /// current brush
+        commandEncoder.setFragmentTexture(brushTexture, index: 0)
+        commandEncoder.setFragmentSamplerState(brushTarget.samplerState, index: 0)
+        /// current Brush opacity
+        commandEncoder.setFragmentBytes(&brushOpacity, length: MemoryLayout<Float>.stride, index: 0)
+        commandEncoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: 4)
+        
         commandEncoder.endEncoding()
         if let drawable = currentDrawable {
             commandBuffer.present(drawable)
@@ -222,6 +245,7 @@ open class MetalView: MTKView {
             let commandEncoder = commandBuffer.makeComputeCommandEncoder()
             else { return }
 
+        print("transferBrushToCanvas")
         
         commandEncoder.setComputePipelineState(computePipelineState!)
 

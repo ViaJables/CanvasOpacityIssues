@@ -35,24 +35,29 @@ class ViewController: UIViewController {
     
     func registerBrushes() {
         do {
-            let pen = canvas.defaultBrush!
-            pen.name = "Pen"
-            pen.opacity = 1
-            pen.pointSize = 150
-            pen.pointStep = 0.5
-            pen.forceSensitive = 1
-            pen.color = .black
-            pen.use()
+            let pencil = try registerBrush(with: "Pencil")
+            pencil.rotation = .random
+            pencil.pointSize = 256
+            pencil.pointStep = 2
+            pencil.forceSensitive = 1
+            pencil.opacity = 1
+            pencil.use()
             
-            
+//            let brush = try registerBrush(with: "Brush")
+//            brush.rotation = .ahead
+//            brush.pointSize = 150
+//            brush.pointStep = 2
+//            brush.forceSensitive = 1
+//            brush.color = .black
+//            brush.opacity = 1.0
+//            brush.forceOnTap = 0.5
+//            brush.use()
+
         } catch MLError.simulatorUnsupported {
             // No simulator support
         } catch {
             // Other errors
         }
-        
-        
-        
         
     }
     
@@ -72,5 +77,6 @@ class ViewController: UIViewController {
     @IBAction func blackTapped(_ sender: Any) {
         canvas.currentBrush.color = .black
     }
+    
 }
 

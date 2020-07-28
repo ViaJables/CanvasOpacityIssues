@@ -45,17 +45,24 @@ vertex Vertex vertex_render_target(constant Vertex *vertices [[ buffer(0) ]],
 
 fragment float4 fragment_render_target(Vertex vertex_data [[ stage_in ]],
                                        texture2d<float> tex2dcanvas [[ texture(0) ]],
-                                       texture2d<float> tex2dbrush [[ texture(1) ]],
                                        constant float &brushOpacity [[ buffer(0) ]],
-                                       sampler smpCanvas [[sampler(0)]],
-                                       sampler smpBrush [[sampler(1)]])
+                                       sampler smpCanvas [[sampler(0)]])
 {
     float4 canvasColor = float4(tex2dcanvas.sample(smpCanvas, vertex_data.text_coord));
+    return canvasColor;
+};
+
+fragment float4 fragment_brush_render_target(Vertex vertex_data [[ stage_in ]],
+                                       texture2d<float> tex2dbrush [[ texture(0) ]],
+                                       constant float &brushOpacity [[ buffer(0) ]],
+                                       sampler smpBrush [[sampler(0)]])
+{
     float4 brushColor = float4(tex2dbrush.sample(smpBrush, vertex_data.text_coord));
 
-    float4 out = mix(canvasColor, brushColor, brushOpacity * brushColor.a);
-    return out;
+    brushColor.a *= brushOpacity;
+    return brushColor;
 };
+
 
 kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2dbrush [[ texture(0) ]],
                                       texture2d<half, access::read_write> tex2dcanvas [[ texture(1) ]],
@@ -70,8 +77,11 @@ kernel void kernel_transfer_brush_fast(texture2d<half, access::read_write> tex2d
     half4 dst = tex2dcanvas.read(gid);
     half4 src = tex2dbrush.read(gid);
     
-    // multiply by brush opacity, then premultiply rgb by alpha
+    // divide by alpha
+    src.rgb /= src.a;
+    // multiply by brush opacity
     src.a *= brushOpacity;
+    // multiply rgb by alpha
     src.rgb *= src.a;
 
     // compute the blended brush + canvas
@@ -105,26 +115,29 @@ kernel void kernel_transfer_brush(texture2d<half, access::read> tex2dbrush [[ te
     half4 dst = tex2dcanvas_in.read(gid);
     half4 src = tex2dbrush.read(gid);
     
-    // multiply by brush opacity, then premultiply rgb by alpha
+    // divide by alpha
+//    src.rgb /= src.a;
+    // multiply by brush opacity
     src.a *= brushOpacity;
-    src.rgb *= src.a;
+    // multiply rgb by alpha
+//    src.rgb *= src.a;
+
     
     // compute the blended brush + canvas
     // https://en.wikipedia.org/wiki/Alpha_compositing
     half newAlpha = src.a + dst.a * (1 - src.a);
     half3 newColor;
     if (newAlpha == 0) {
-        newColor = 0;
+        newColor = half3(0,0,0);
     } else {
-        newColor = (src.rgb + dst.rgb * (1 - src.a));
+//        newColor = src.rgb * src.a + dst.rgb;
+        newColor = (src.rgb + dst.rgb * (1 - src.a)); // newAlpha;
+//        newColor = (src.rgb * src.a) + (dst.rgb * (1 - src.a)); // newAlpha;
     }
     half4 out = half4(newColor, newAlpha);
     tex2dcanvas_out.write(out, gid);
-    
-//    // clear the brush texture
-//    half4 transparent = half4(0,0,0,0);
-//    tex2dbrush.write(transparent, gid);
 }
+
 
 float2 transformPointCoord(float2 pointCoord, float a, float2 anchor) {
     float2 point20 = pointCoord - anchor;
@@ -166,17 +179,27 @@ vertex Point vertex_point_func(constant Point *points [[ buffer(0) ]],
     return out;
 };
 
-fragment float4 fragment_point_func(Point point_data [[ stage_in ]],
+
+
+/// textured brush shader
+fragment half4 fragment_point_func(Point point_data [[ stage_in ]],
                                     texture2d<float> tex2d [[ texture(0) ]],
                                     float2 pointCoord  [[ point_coord ]])
 {
     constexpr sampler textureSampler(mag_filter::linear, min_filter::linear);
     float2 text_coord = transformPointCoord(pointCoord, point_data.angle, float2(0.5));
-    float4 color = float4(tex2d.sample(textureSampler, text_coord));
-    return float4(point_data.color.rgb, color.a * point_data.color.a);
+//    float2 text_coord = transformPointCoord(pointCoord, 0, float2(0.5));
+    half4 brush = half4(tex2d.sample(textureSampler, text_coord));
+
+    half outAlpha = brush.a;
+    half3 outColor = half3(point_data.color.rgb);
+
+    return half4(outColor, outAlpha);
 };
 
-// fragment shader for glowing lines
+
+
+/// glowing lines fragment shader
 fragment float4 fragment_point_func_glowing(Point point_data [[ stage_in ]],
                                             texture2d<float> tex2d [[ texture(0) ]],
                                             float2 pointCoord  [[ point_coord ]])
@@ -191,7 +214,9 @@ fragment float4 fragment_point_func_glowing(Point point_data [[ stage_in ]],
     return float4(point_data.color.rgb, color.a * point_data.color.a);
 };
 
-// fragment shader that applies original color of the texture
+
+
+/// fragment shader that applies original color of the texture
 fragment half4 fragment_point_func_original(Point point_data [[ stage_in ]],
                                             texture2d<float> tex2d [[ texture(0) ]],
                                             float2 pointCoord  [[ point_coord ]])
@@ -201,6 +226,9 @@ fragment half4 fragment_point_func_original(Point point_data [[ stage_in ]],
     return half4(color.rgb, color.a * point_data.color.a);
 };
 
+
+
+/// round brush fragment shader (no texture)
 fragment float4 fragment_point_func_without_texture(Point point_data [[ stage_in ]],
                                                     float2 pointCoord  [[ point_coord ]])
 {
