@@ -43,7 +43,7 @@ open class LineStrip: CanvasElement {
         self.startTime = startTime
         self.endTime = endTime
         
-        remakBuffer(rotation: brush.rotation)
+        remakeBuffer(rotation: brush.rotation)
     }
     
     open func append(lines: [MLLine]) {
@@ -112,7 +112,7 @@ open class LineStrip: CanvasElement {
     /// get vertex buffer for this line strip, remake if not exists
     open func retrieveBuffers(rotation: Brush.Rotation) -> MTLBuffer? {
         if vertex_buffer == nil {
-            remakBuffer(rotation: rotation)
+            remakeBuffer(rotation: rotation)
         }
         return vertex_buffer
     }
@@ -122,7 +122,7 @@ open class LineStrip: CanvasElement {
     
     private var vertex_buffer: MTLBuffer?
     
-    private func remakBuffer(rotation: Brush.Rotation) {
+    private func remakeBuffer(rotation: Brush.Rotation) {
             
             guard lines.count > 0 else {
                 return

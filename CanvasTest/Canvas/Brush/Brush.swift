@@ -96,12 +96,8 @@ open class Brush {
     
     // called when color or opacity changed
     private func updateRenderingColor() {
-
-        /// use full opacity, draw to brushTexture and at the end of the stroke transfer brush to canvas with the brushe's opacity
-        renderingColor = color.toMLColor(opacity: 1.0)
-
-        /// older code
-//        renderingColor = color.toMLColor(opacity: opacity)
+        /// use full opacity, draw to brushTexture and at the end of the stroke transfer brush to canvas with the brush's opacity
+        renderingColor = color.toMLColor(opacity: opacity)
     }
     
     // designed initializer, will be called by target when reigster called
@@ -191,19 +187,29 @@ open class Brush {
     open func setupBlendOptions(for attachment: MTLRenderPipelineColorAttachmentDescriptor) {
         attachment.isBlendingEnabled = true
 
-        attachment.rgbBlendOperation = .add
-        attachment.sourceRGBBlendFactor = .sourceAlpha
-        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
-        
-        attachment.alphaBlendOperation = .max
+//        attachment.rgbBlendOperation = .add
+//        attachment.sourceRGBBlendFactor = .sourceAlpha
+//        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha
+//
+//        attachment.alphaBlendOperation = .max
+//        attachment.sourceAlphaBlendFactor = .one
+//        attachment.destinationAlphaBlendFactor = .one
+
+        // RGB
+        attachment.sourceRGBBlendFactor = .sourceAlpha // SOURCE(brush color) * 1
+        attachment.rgbBlendOperation = .add            // +
+        attachment.destinationRGBBlendFactor = .oneMinusSourceAlpha // DEST(target) * (1 - SOURCE.ALPHA)
+
+        // alpha
         attachment.sourceAlphaBlendFactor = .one
+        attachment.alphaBlendOperation = .add
         attachment.destinationAlphaBlendFactor = .oneMinusSourceAlpha
     }
     
     // MARK: - Render Actions
 
     private func updatePointPipeline() {
-        
+        print("updatePointPipeline")
         guard let target = target, let device = target.device, let library = makeShaderLibrary(from: device) else {
             return
         }

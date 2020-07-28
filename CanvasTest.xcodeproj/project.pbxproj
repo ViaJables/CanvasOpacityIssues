@@ -53,6 +53,9 @@
 		1A9D670224AAE370004D35EA /* Maths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66DB24AAE370004D35EA /* Maths.swift */; };
 		1A9D670324AAE370004D35EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D66DC24AAE370004D35EA /* Utils.swift */; };
 		1A9D670524AAE4EE004D35EA /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A9D670424AAE4EE004D35EA /* UIColor+Hex.swift */; };
+		2FA00DD224D078A4004EBDCD /* Pencil.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FA00DD024D078A4004EBDCD /* Pencil.png */; };
+		2FA00DD324D078A4004EBDCD /* Brush.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FA00DD124D078A4004EBDCD /* Brush.png */; };
+		2FA00DD524D0A4D0004EBDCD /* PencilG.png in Resources */ = {isa = PBXBuildFile; fileRef = 2FA00DD424D0A4D0004EBDCD /* PencilG.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +107,9 @@
 		1A9D66DB24AAE370004D35EA /* Maths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Maths.swift; sourceTree = "<group>"; };
 		1A9D66DC24AAE370004D35EA /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		1A9D670424AAE4EE004D35EA /* UIColor+Hex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		2FA00DD024D078A4004EBDCD /* Pencil.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pencil.png; sourceTree = "<group>"; };
+		2FA00DD124D078A4004EBDCD /* Brush.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Brush.png; sourceTree = "<group>"; };
+		2FA00DD424D0A4D0004EBDCD /* PencilG.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PencilG.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +142,7 @@
 		1A9D669924AAE345004D35EA /* CanvasTest */ = {
 			isa = PBXGroup;
 			children = (
+				2FA00DC524D0731D004EBDCD /* Drawing */,
 				1A9D66AE24AAE370004D35EA /* Canvas */,
 				1A9D669A24AAE345004D35EA /* AppDelegate.swift */,
 				1A9D669C24AAE345004D35EA /* SceneDelegate.swift */,
@@ -251,6 +258,24 @@
 			path = "Math & Utils";
 			sourceTree = "<group>";
 		};
+		2FA00DC524D0731D004EBDCD /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				2FA00DC624D0731D004EBDCD /* Textures */,
+			);
+			path = Drawing;
+			sourceTree = "<group>";
+		};
+		2FA00DC624D0731D004EBDCD /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+				2FA00DD424D0A4D0004EBDCD /* PencilG.png */,
+				2FA00DD124D078A4004EBDCD /* Brush.png */,
+				2FA00DD024D078A4004EBDCD /* Pencil.png */,
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -309,7 +334,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2FA00DD524D0A4D0004EBDCD /* PencilG.png in Resources */,
+				2FA00DD324D078A4004EBDCD /* Brush.png in Resources */,
 				1A9D66A724AAE348004D35EA /* LaunchScreen.storyboard in Resources */,
+				2FA00DD224D078A4004EBDCD /* Pencil.png in Resources */,
 				1A9D66A424AAE348004D35EA /* Assets.xcassets in Resources */,
 				1A9D66A224AAE345004D35EA /* Main.storyboard in Resources */,
 				1A9D66E324AAE370004D35EA /* .gitkeep in Resources */,
